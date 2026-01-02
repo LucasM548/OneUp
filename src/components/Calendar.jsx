@@ -73,6 +73,8 @@ export function Calendar({ startDate, completions, onClose }) {
             display: 'flex',
             flexDirection: 'column',
             padding: 'var(--spacing-md)',
+            paddingTop: 'calc(var(--spacing-md) + env(safe-area-inset-top))',
+            paddingBottom: 'calc(var(--spacing-md) + env(safe-area-inset-bottom))',
             overflowY: 'auto'
         }}>
             {/* Header */}
