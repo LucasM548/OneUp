@@ -162,9 +162,9 @@ export function Settings({ settings, onClose, onSave, cloudAuth, cloudSync, conf
                         <button
                             onClick={handleToggleNotifications}
                             style={{
-                                width: '56px',
-                                height: '32px',
-                                borderRadius: '16px',
+                                width: '52px',
+                                height: '28px',
+                                borderRadius: '14px',
                                 background: settings.notificationsEnabled
                                     ? 'linear-gradient(135deg, #10b981, #059669)'
                                     : 'rgba(255,255,255,0.1)',
@@ -174,17 +174,18 @@ export function Settings({ settings, onClose, onSave, cloudAuth, cloudSync, conf
                                 transition: 'all 0.3s ease',
                                 boxShadow: settings.notificationsEnabled
                                     ? '0 4px 12px rgba(16, 185, 129, 0.4)'
-                                    : 'none'
+                                    : 'none',
+                                flexShrink: 0
                             }}
                         >
                             <div style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '20px',
+                                height: '20px',
                                 borderRadius: '50%',
                                 background: 'white',
                                 position: 'absolute',
                                 top: '4px',
-                                left: settings.notificationsEnabled ? '28px' : '4px',
+                                left: settings.notificationsEnabled ? 'calc(100% - 24px)' : '4px',
                                 transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                             }} />
@@ -296,9 +297,9 @@ export function Settings({ settings, onClose, onSave, cloudAuth, cloudSync, conf
                         <button
                             onClick={handleToggleSounds}
                             style={{
-                                width: '56px',
-                                height: '32px',
-                                borderRadius: '16px',
+                                width: '52px',
+                                height: '28px',
+                                borderRadius: '14px',
                                 background: settings.soundsEnabled
                                     ? 'linear-gradient(135deg, #0ea5e9, #06b6d4)'
                                     : 'rgba(255,255,255,0.1)',
@@ -308,17 +309,18 @@ export function Settings({ settings, onClose, onSave, cloudAuth, cloudSync, conf
                                 transition: 'all 0.3s ease',
                                 boxShadow: settings.soundsEnabled
                                     ? '0 4px 12px rgba(14, 165, 233, 0.4)'
-                                    : 'none'
+                                    : 'none',
+                                flexShrink: 0
                             }}
                         >
                             <div style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '20px',
+                                height: '20px',
                                 borderRadius: '50%',
                                 background: 'white',
                                 position: 'absolute',
                                 top: '4px',
-                                left: settings.soundsEnabled ? '28px' : '4px',
+                                left: settings.soundsEnabled ? 'calc(100% - 24px)' : '4px',
                                 transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                             }} />

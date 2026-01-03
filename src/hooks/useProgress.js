@@ -136,37 +136,44 @@ export function useProgress() {
           
           // Calculate day number for when notification will be sent
           const notificationDateStr = getLocalDateStr(notificationTime);
-          const dayNum = getDayNumber(notificationDateStr);
           
-          // Create engaging message with exact pushup count
-          const messages = [
-            `🎯 ${dayNum} pushups today! Let\'s crush this goal! 💪`,
-            `💥 Challenge: ${dayNum} pushups! You got this! 🔥`,
-            `⚡ ${dayNum} pushups waiting for you! Time to shine! ✨`,
-            `🚀 ${dayNum} pushups to keep the streak alive! Let\'s go! 🏆`
-          ];
+          // Check if that day's pushups are already completed
+          const isDayCompleted = state.completions[notificationDateStr]?.done;
           
-          // Randomly select a message for variety
-          const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
-          
-          await LocalNotifications.schedule({
-            notifications: [
-              {
-                id: NOTIFICATION_ID,
-                title: '💪 OneUp - Daily Challenge!',
-                body: selectedMessage,
-                schedule: {
-                  at: notificationTime,
-                  repeats: true,
-                  every: 'day'
-                },
-                sound: null,
-                attachments: null,
-                actionTypeId: '',
-                extra: null
-              }
-            ]
-          });
+          // Only schedule notification if the day is NOT already completed
+          if (!isDayCompleted) {
+            const dayNum = getDayNumber(notificationDateStr);
+            
+            // Create engaging message with exact pushup count
+            const messages = [
+              `🎯 ${dayNum} pushups today! Let\\'s crush this goal! 💪`,
+              `💥 Challenge: ${dayNum} pushups! You got this! 🔥`,
+              `⚡ ${dayNum} pushups waiting for you! Time to shine! ✨`,
+              `🚀 ${dayNum} pushups to keep the streak alive! Let\\'s go! 🏆`
+            ];
+            
+            // Randomly select a message for variety
+            const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            await LocalNotifications.schedule({
+              notifications: [
+                {
+                  id: NOTIFICATION_ID,
+                  title: '💪 OneUp - Daily Challenge!',
+                  body: selectedMessage,
+                  schedule: {
+                    at: notificationTime,
+                    repeats: true,
+                    every: 'day'
+                  },
+                  sound: null,
+                  attachments: null,
+                  actionTypeId: '',
+                  extra: null
+                }
+              ]
+            });
+          }
         }
       }
     } catch (error) {

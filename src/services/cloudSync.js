@@ -103,7 +103,7 @@ class CloudSyncService {
     return () => this.listeners.delete(callback);
   }
 
-  // Connexion avec Google
+  // Connexion avec Google (native - using ID token)
   async signInWithGoogle(idToken) {
     try {
       if (!auth) {
@@ -137,6 +137,45 @@ class CloudSyncService {
       return result.user;
     } catch (error) {
       logger.error('Sign in error:', error);
+      throw error;
+    }
+  }
+
+  // Connexion avec Google (web - using access token from GIS)
+  async signInWithGoogleWeb(accessToken, userInfo) {
+    try {
+      if (!auth) {
+        throw new Error('Firebase not initialized');
+      }
+
+      // For web with GIS, we use the access token to create a credential
+      const credential = GoogleAuthProvider.credential(null, accessToken);
+      const result = await signInWithCredential(auth, credential);
+      
+      // Sauvegarder l'état de connexion
+      await Preferences.set({
+        key: 'user_signed_in',
+        value: 'true'
+      });
+
+      await Preferences.set({
+        key: 'user_id',
+        value: result.user.uid
+      });
+
+      this.notifyListeners({
+        isSignedIn: true,
+        user: {
+          uid: result.user.uid,
+          email: result.user.email || userInfo.email,
+          displayName: result.user.displayName || userInfo.name,
+          photoURL: result.user.photoURL || userInfo.picture
+        }
+      });
+
+      return result.user;
+    } catch (error) {
+      logger.error('Web sign in error:', error);
       throw error;
     }
   }

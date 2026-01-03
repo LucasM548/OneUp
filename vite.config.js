@@ -8,6 +8,15 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Force immediate update in development
+      workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true
+      },
+      devOptions: {
+        enabled: false  // Disable SW completely in dev mode (npm run dev)
+      },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: '1 Pushup Per Day Challenge',

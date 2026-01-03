@@ -35,7 +35,7 @@ android/app/src/main/assets/public/
 android/app/google-services.json
 google-services.json
 
-# Android Signing (Already in android/.gitignore but adding here for safety)
+# Android Signing
 *.jks
 *.keystore
 android/keystore.properties
@@ -47,3 +47,7 @@ android/capacitor-cordova-android-plugins/build/
 .env
 .env.local
 .env.*.local
+
+# Generated configuration files (created from templates)
+capacitor.config.json
+android/app/src/main/res/values/strings.xml

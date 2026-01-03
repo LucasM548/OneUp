@@ -1,10 +1,13 @@
 {
   "name": "pushup-tracker",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.5.1",
   "type": "module",
   "scripts": {
+    "generate:config": "node scripts/generate-config.js",
+    "predev": "npm run generate:config",
     "dev": "vite",
+    "prebuild": "npm run generate:config",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -16,6 +19,7 @@
     "@capacitor/local-notifications": "^8.0.0",
     "@capacitor/preferences": "^8.0.0",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
+    "@react-oauth/google": "^0.13.4",
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.7.0",
     "i18next": "^25.7.3",
@@ -38,6 +42,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "dotenv": "^16.6.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

@@ -404,17 +404,21 @@ export function CloudSyncPanel({
           background: rgba(255, 255, 255, 0.03);
           border-radius: 16px;
           border: 1px solid rgba(255, 255, 255, 0.05);
+          flex-wrap: wrap;
         }
 
         .user-avatar {
           width: 48px;
           height: 48px;
+          min-width: 48px;
+          min-height: 48px;
           border-radius: 50%;
           background: linear-gradient(135deg, hsl(220, 90%, 60%), hsl(260, 90%, 65%));
           display: flex;
           align-items: center;
           justify-content: center;
           overflow: hidden;
+          flex-shrink: 0;
         }
 
         .user-avatar img {
@@ -431,6 +435,8 @@ export function CloudSyncPanel({
 
         .user-details {
           flex: 1;
+          min-width: 0;
+          overflow: hidden;
         }
 
         .user-name {
@@ -438,12 +444,18 @@ export function CloudSyncPanel({
           font-size: 16px;
           font-weight: 600;
           color: var(--text-primary);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .user-email {
           margin: 0;
           font-size: 13px;
           color: var(--text-muted);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .conflict-dialog {
