@@ -129,18 +129,18 @@ export function useProgress() {
     setState(prev => {
       const newCompletions = { ...prev.completions };
       const current = newCompletions[dateStr] || {};
-      
+
       // Ensure count doesn't go below 0
       const finalCount = Math.max(0, newCount);
-      
+
       // Strict validation: status implies count >= goal
       // When the user manually updates the count, we enforce this truth.
       const isNowDone = Number(finalCount) >= Number(dailyGoal);
       const wasDone = current.done || false;
-      
+
       let timestamp = current.timestamp;
       let timeOfDay = current.timeOfDay;
-      
+
       // Only update metadata if status changes
       if (!wasDone && isNowDone) {
         // Just finished!
@@ -155,7 +155,7 @@ export function useProgress() {
         timestamp = null;
         timeOfDay = null;
       }
-      
+
       newCompletions[dateStr] = {
         ...current,
         pushupCount: finalCount,
@@ -163,7 +163,7 @@ export function useProgress() {
         timestamp,
         timeOfDay
       };
-      
+
       return { ...prev, completions: newCompletions };
     });
   };

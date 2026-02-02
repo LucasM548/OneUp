@@ -26,18 +26,18 @@ export function useGoogleAuth() {
     onSuccess: async (tokenResponse) => {
       try {
         logger.info('GIS sign-in successful, retrieving user info...');
-        
+
         // Get user info from Google
         const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
         });
         const userInfo = await userInfoResponse.json();
-        
+
         logger.success('User info retrieved:', userInfo.email);
-        
+
         // Sign in to Firebase with access token and user info
         await cloudSync.signInWithGoogleWeb(tokenResponse.access_token, userInfo);
-        
+
       } catch (error) {
         logger.error('GIS sign-in error:', error);
         setAuthState(prev => ({
@@ -76,7 +76,7 @@ export function useGoogleAuth() {
   // Check auth status on mount
   useEffect(() => {
     checkAuthStatus();
-    
+
     // Subscribe to cloudSync state changes
     const unsubscribe = cloudSync.subscribe((state) => {
       setAuthState(prev => ({
@@ -137,7 +137,7 @@ export function useGoogleAuth() {
   // Unified sign-in function
   const signIn = async () => {
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
-    
+
     if (isNative) {
       await signInNative();
     } else {
@@ -165,7 +165,7 @@ export function useGoogleAuth() {
         await GoogleAuth.signOut();
       }
       // For web GIS, there's no explicit logout needed, just Firebase
-      
+
       await cloudSync.signOut();
 
       setAuthState({

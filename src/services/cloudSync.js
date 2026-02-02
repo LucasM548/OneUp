@@ -1,18 +1,18 @@
 import { initializeApp } from 'firebase/app';
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
+import {
+  getAuth,
+  GoogleAuthProvider,
   signInWithCredential,
   signOut as firebaseSignOut,
-  onAuthStateChanged 
+  onAuthStateChanged
 } from 'firebase/auth';
-import { 
-  getDatabase, 
-  ref, 
-  set, 
-  get, 
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
   onValue,
-  serverTimestamp 
+  serverTimestamp
 } from 'firebase/database';
 import { Preferences } from '@capacitor/preferences';
 import { createLogger } from '../utils/logger';
@@ -61,7 +61,7 @@ class CloudSyncService {
       onAuthStateChanged(auth, async (user) => {
         if (user) {
           logger.info('Firebase Auth Restored:', user.email);
-          
+
           await Preferences.set({
              key: 'user_signed_in',
              value: 'true'
@@ -112,7 +112,7 @@ class CloudSyncService {
 
       const credential = GoogleAuthProvider.credential(idToken);
       const result = await signInWithCredential(auth, credential);
-      
+
       // Sauvegarder l'état de connexion
       await Preferences.set({
         key: 'user_signed_in',
@@ -151,7 +151,7 @@ class CloudSyncService {
       // For web with GIS, we use the access token to create a credential
       const credential = GoogleAuthProvider.credential(null, accessToken);
       const result = await signInWithCredential(auth, credential);
-      
+
       // Sauvegarder l'état de connexion
       await Preferences.set({
         key: 'user_signed_in',
@@ -188,7 +188,7 @@ class CloudSyncService {
       }
 
       await firebaseSignOut(auth);
-      
+
       await Preferences.remove({ key: 'user_signed_in' });
       await Preferences.remove({ key: 'user_id' });
 
@@ -206,7 +206,7 @@ class CloudSyncService {
   async checkSignInStatus() {
     try {
       const { value } = await Preferences.get({ key: 'user_signed_in' });
-      
+
       if (value === 'true' && auth?.currentUser) {
         return {
           isSignedIn: true,
@@ -218,7 +218,7 @@ class CloudSyncService {
           }
         };
       }
-      
+
       return { isSignedIn: false, user: null };
     } catch (error) {
       logger.error('Check sign in status error:', error);
@@ -229,7 +229,7 @@ class CloudSyncService {
   // Sanitize data for cloud (remove pushup counts)
   sanitizeForCloud(data) {
     if (!data || !data.completions) return data;
-    
+
     // Create deep copy to avoid mutating original
     const sanitizedCompletions = {};
     Object.keys(data.completions).forEach(key => {
@@ -272,10 +272,10 @@ class CloudSyncService {
       };
 
       await set(userRef, dataWithTimestamp);
-      
+
       logger.success('Data saved to cloud successfully');
       this.syncInProgress = false;
-      
+
       return true;
     } catch (error) {
       logger.error('Error saving to cloud:', error);
@@ -295,12 +295,12 @@ class CloudSyncService {
       const userRef = ref(database, `users/${userId}/progress`);
 
       const snapshot = await get(userRef);
-      
+
       if (snapshot.exists()) {
         logger.success('Data loaded from cloud successfully');
         return snapshot.val();
       }
-      
+
       logger.info('No cloud data found');
       return null;
     } catch (error) {
@@ -340,20 +340,20 @@ class CloudSyncService {
 
     // Fusionner les completions en gardant la donnée la plus récente
     const mergedCompletions = { ...localData.completions };
-    
+
     if (cloudData.completions) {
       Object.keys(cloudData.completions).forEach(dateStr => {
         const cloudEntry = cloudData.completions[dateStr];
         const localEntry = mergedCompletions[dateStr];
-        
+
         // Si l'entrée cloud est plus récente ou n'existe pas en local, la prendre
-        if (!localEntry || 
-            (cloudEntry.timestamp && localEntry.timestamp && 
+        if (!localEntry ||
+            (cloudEntry.timestamp && localEntry.timestamp &&
              new Date(cloudEntry.timestamp) > new Date(localEntry.timestamp))) {
-          
+
           // Restore local pushup count if available (since cloud doesn't have it)
           const preservedCount = localEntry?.pushupCount || 0;
-          
+
           mergedCompletions[dateStr] = {
               ...cloudEntry,
               pushupCount: preservedCount
@@ -377,7 +377,7 @@ class CloudSyncService {
       const cloudData = await this.loadFromCloud();
       const mergedData = await this.mergeData(localData, cloudData);
       await this.saveToCloud(mergedData);
-      
+
       return mergedData;
     } catch (error) {
       logger.error('Sync error:', error);
@@ -391,18 +391,18 @@ class CloudSyncService {
     try {
       if (!auth?.currentUser || !database) {
          // Silently fail if not logged in, it's fine for local-only
-         return false; 
+         return false;
       }
-      
+
       const userId = auth.currentUser.uid;
       const settingsRef = ref(database, `users/${userId}/settings`);
-      
+
       await set(settingsRef, settings);
       logger.success('Settings synced to cloud');
       return true;
     } catch (error) {
       logger.error('Error syncing settings:', error);
-      return false; 
+      return false;
     }
   }
 
@@ -413,7 +413,7 @@ class CloudSyncService {
 
       const userId = auth.currentUser.uid;
       const settingsRef = ref(database, `users/${userId}/settings`);
-      
+
       const snapshot = await get(settingsRef);
       if (snapshot.exists()) {
         logger.success('Settings loaded from cloud');
