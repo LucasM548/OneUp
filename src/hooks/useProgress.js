@@ -271,6 +271,7 @@ export function useProgress() {
   const getTotalPushups = () => {
     return Object.keys(state.completions).reduce((total, dateStr) => {
       if (dateStr < state.startDate) return total;
+      if (!state.completions[dateStr]?.done) return total;
       return total + getDayNumber(dateStr);
     }, 0);
   };
